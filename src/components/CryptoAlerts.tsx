@@ -11,8 +11,9 @@ export function CryptoAlerts() {
     crypto_symbol: '',
     target_price: '',
     alert_type: 'above' as const,
+    email_notifications: true,
   });
-  
+
   const { notification, showNotification, hideNotification } = useNotification();
 
   useEffect(() => {
@@ -30,11 +31,12 @@ export function CryptoAlerts() {
 
   async function handleCreateAlert(e: React.FormEvent) {
     e.preventDefault();
-    
+
     const { error } = await createAlert({
       crypto_symbol: newAlert.crypto_symbol.toUpperCase(),
       target_price: parseFloat(newAlert.target_price),
       alert_type: newAlert.alert_type,
+      email_notifications: newAlert.email_notifications,
     });
 
     if (error) {
@@ -45,6 +47,7 @@ export function CryptoAlerts() {
         crypto_symbol: '',
         target_price: '',
         alert_type: 'above',
+        email_notifications: true,
       });
       loadAlerts();
     }
@@ -75,7 +78,7 @@ export function CryptoAlerts() {
     }
   }
 
-  const handleFormChange = (field: string, value: string) => {
+  const handleFormChange = (field: string, value: string | boolean) => {
     setNewAlert(prev => ({ ...prev, [field]: value }));
   };
 
@@ -90,11 +93,12 @@ export function CryptoAlerts() {
       )}
 
       <h1 className="text-2xl font-bold mb-6">Crypto Price Alerts</h1>
-      
+
       <AlertForm
         cryptoSymbol={newAlert.crypto_symbol}
         targetPrice={newAlert.target_price}
         alertType={newAlert.alert_type}
+        emailNotifications={newAlert.email_notifications}
         onSubmit={handleCreateAlert}
         onChange={handleFormChange}
       />

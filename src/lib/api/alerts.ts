@@ -6,6 +6,7 @@ export interface CryptoAlert {
   target_price: number;
   alert_type: 'above' | 'below';
   is_active: boolean;
+  email_notifications: boolean;
 }
 
 export async function fetchAlerts() {
@@ -17,7 +18,7 @@ export async function fetchAlerts() {
 
 export async function createAlert(alert: Omit<CryptoAlert, 'id' | 'is_active'>) {
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   if (!user) {
     return { error: new Error('User not authenticated') };
   }

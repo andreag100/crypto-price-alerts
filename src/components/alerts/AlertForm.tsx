@@ -5,11 +5,19 @@ interface AlertFormProps {
   cryptoSymbol: string;
   targetPrice: string;
   alertType: 'above' | 'below';
+  emailNotifications: boolean;
   onSubmit: (e: React.FormEvent) => void;
-  onChange: (field: string, value: string) => void;
+  onChange: (field: string, value: string | boolean) => void;
 }
 
-export function AlertForm({ cryptoSymbol, targetPrice, alertType, onSubmit, onChange }: AlertFormProps) {
+export function AlertForm({
+  cryptoSymbol,
+  targetPrice,
+  alertType,
+  emailNotifications,
+  onSubmit,
+  onChange
+}: AlertFormProps) {
   return (
     <form onSubmit={onSubmit} className="mb-8 bg-white p-4 rounded-lg shadow">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -38,6 +46,18 @@ export function AlertForm({ cryptoSymbol, targetPrice, alertType, onSubmit, onCh
           <option value="above">Price Above</option>
           <option value="below">Price Below</option>
         </select>
+      </div>
+      <div className="mt-4 flex items-center">
+        <input
+          type="checkbox"
+          id="emailNotifications"
+          checked={emailNotifications}
+          onChange={(e) => onChange('email_notifications', e.target.checked)}
+          className="mr-2"
+        />
+        <label htmlFor="emailNotifications" className="text-sm text-gray-600">
+          Send email notifications when price target is reached
+        </label>
       </div>
       <button
         type="submit"
