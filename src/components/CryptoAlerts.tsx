@@ -12,7 +12,7 @@ export function CryptoAlerts() {
     target_price: '',
     alert_type: 'above' as const,
   });
-
+  
   const { notification, showNotification, hideNotification } = useNotification();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function CryptoAlerts() {
 
   async function handleCreateAlert(e: React.FormEvent) {
     e.preventDefault();
-
+    
     const { error } = await createAlert({
       crypto_symbol: newAlert.crypto_symbol.toUpperCase(),
       target_price: parseFloat(newAlert.target_price),
@@ -90,7 +90,7 @@ export function CryptoAlerts() {
       )}
 
       <h1 className="text-2xl font-bold mb-6">Crypto Price Alerts</h1>
-
+      
       <AlertForm
         cryptoSymbol={newAlert.crypto_symbol}
         targetPrice={newAlert.target_price}

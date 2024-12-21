@@ -17,7 +17,7 @@ export async function fetchAlerts() {
 
 export async function createAlert(alert: Omit<CryptoAlert, 'id' | 'is_active'>) {
   const { data: { user } } = await supabase.auth.getUser();
-
+  
   if (!user) {
     return { error: new Error('User not authenticated') };
   }
