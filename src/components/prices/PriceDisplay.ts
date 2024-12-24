@@ -4,7 +4,7 @@ import { CryptoPrice } from '../../lib/types/crypto';
 
 interface PriceDisplayProps {
   prices: CryptoPrice[];
-  loading: boolean; 
+  loading: boolean;
 }
 
 export function PriceDisplay({ prices, loading }: PriceDisplayProps) {
