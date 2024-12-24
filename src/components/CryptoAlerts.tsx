@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { AlertForm } from './alerts/AlertForm';
 import { AlertList } from './alerts/AlertList';
+import { PriceDisplay } from './prices/PriceDisplay';
 import { Notification } from './Notification';
 import { useNotification } from '../lib/hooks/useNotification';
+import { useCryptoPrices } from '../lib/hooks/useCryptoPrices';
 import { CryptoAlert, fetchAlerts, createAlert, toggleAlert, deleteAlert } from '../lib/api/alerts';
 
 export function CryptoAlerts() {
@@ -15,6 +17,7 @@ export function CryptoAlerts() {
   });
 
   const { notification, showNotification, hideNotification } = useNotification();
+  const { prices, loading: pricesLoading } = useCryptoPrices();
 
   useEffect(() => {
     loadAlerts();
@@ -83,7 +86,7 @@ export function CryptoAlerts() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-4 space-y-8">
       {notification.show && (
         <Notification
           message={notification.message}
@@ -93,6 +96,8 @@ export function CryptoAlerts() {
       )}
 
       <h1 className="text-2xl font-bold mb-6">Crypto Price Alerts</h1>
+
+      <PriceDisplay prices={prices} loading={pricesLoading} />
 
       <AlertForm
         cryptoSymbol={newAlert.crypto_symbol}
