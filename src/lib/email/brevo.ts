@@ -1,7 +1,15 @@
 import { TransactionalEmailsApi, SendSmtpEmail } from '@brevo/node';
+import { logDebug, logError } from '../utils/debug';
+
+const BREVO_API_KEY = import.meta.env.VITE_BREVO_API_KEY;
 
 const apiInstance = new TransactionalEmailsApi();
-apiInstance.setApiKey(TransactionalEmailsApi.ApiKeysEnum.apiKey, import.meta.env.VITE_BREVO_API_KEY);
+
+if (!BREVO_API_KEY) {
+  logError('Brevo', 'Missing BREVO_API_KEY environment variable');
+} else {
+  apiInstance.setApiKey(TransactionalEmailsApi.ApiKeysEnum.apiKey, BREVO_API_KEY);
+}
 
 export async function sendPriceAlert(
   to: string,
@@ -10,6 +18,14 @@ export async function sendPriceAlert(
   currentPrice: number,
   alertType: 'above' | 'below'
 ) {
+  logDebug('Brevo', 'Sending price alert email', {
+    to,
+    cryptoSymbol,
+    targetPrice,
+    currentPrice,
+    alertType
+  });
+
   const sendSmtpEmail = new SendSmtpEmail();
 
   sendSmtpEmail.subject = `Price Alert: ${cryptoSymbol} is ${alertType} ${targetPrice}`;
@@ -29,10 +45,11 @@ export async function sendPriceAlert(
   sendSmtpEmail.to = [{ email: to }];
 
   try {
-    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    logDebug('Brevo', 'Email sent successfully', response);
     return { success: true };
   } catch (error) {
-    console.error('Error sending email:', error);
+    logError('Brevo', error);
     return { success: false, error };
   }
 }
