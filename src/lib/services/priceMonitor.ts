@@ -1,6 +1,6 @@
 import { logDebug, logError } from '../utils/debug';
 import { CryptoAlert } from '../api/alerts';
-import { sendPriceAlert } from '../email/brevo';
+import { sendPriceAlert } from '../email/mailgun';
 import { supabase } from '../supabase';
 
 export async function checkPriceAlerts(prices: Record<string, number>) {
